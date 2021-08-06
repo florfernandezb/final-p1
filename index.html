@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Programación I | Parcial 2 | Fernandez Bugna Florencia, Jaureguialzo Manuela</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<link rel="shortcut icon" href="favicon.jpg" />
+		<link rel="stylesheet" href="estilo.css" />
+	</head>
+	<body>
+		<header>
+			<h1>Programación I | Parcial 2 | Fernández Bugna Florencia, Jaureguialzo Manuela | Mi carrito</h1>
+		</header>
+		<main>
+			
+			<div id="minicarrito">
+				
+			</div>
+			<h2>Productos</h2>
+			<!-- Generar el contenido del div#productos dinámicamente -->
+			<div id="productos">
+				
+			</div>
+
+			<div id="alerta">Agregado al carrito</div>
+		</main>
+		<footer>
+			<ul>
+				<li><a href="mailto:florencia.fernandezb@davinci.edu.ar?subject=P1%20-%20Parcial%202%20-%20DWN2A" target="_blank">Florencia Fernández Bugna</a></li>
+				<li>
+					<a href="mailto:federico.noto@davinci.edu.ar?subject=P1%20-%20Consulta%20-%20DW2[M|T|N][A|B]%20-%20Apellido,%20Nombre" target="_blank">Programación I</a>
+				</li>
+				<li><a href="mailto:manuela.jaureguialzo@davinci.edu.ar?subject=P1%20-%20Parcial%202%20-%20DWN2A" target="_blank">Manuela Jaureguialzo</a></li>
+			</ul>
+		</footer>
+
+		<script src="producto.js"></script>
+		<script src="listadoProds.js"></script>
+		<script src="parcial.js"></script>
+
+		<script >
+			window.onload = function() {
+				crearProducto()
+				crearModalProducto()
+				agregarAlCarrito()
+				crearMiniCarrito()
+			}
+		</script>
+	</body>
+</html>
