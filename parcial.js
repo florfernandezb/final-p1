@@ -36,34 +36,6 @@ const crearProducto = function(producto) {
     }
 }
 
-    // PRINCIPIOS DE FILTRO POR CATEGORIA
-// const crearProducto = function(producto) {
-//     let padre = d.createElement('div');
-//     padre.id = `producto-${producto.id}`;
-//     let img, titulo, precio, boton;
-
-//     img = crearEstructuraImagen(producto.imagen);
-//     titulo = crearEstructuraNombre(producto.nombre);
-//     precio = crearEstructuraPrecio(producto.precio);
-//     boton = crearBotonAgregar();
-    
-//     padre.append(img, titulo, precio, boton);
-
-//     d.getElementById('productos').appendChild(padre);
-// }
-
-// const filtraCategoria = function() {
-//     for (let producto of catalogo) {
-//         if(valorSeleccionado == todos) {
-//             crearProducto(producto)
-//         } else {
-//             if (producto.categoria == valorSeleccionado) {
-//                 crearProducto(producto)
-//             }
-//         }
-//     }   
-// }
-
 const crearBotonAgregar = function() {
     let boton = d.createElement('button');
     boton.textContent = "Agregar";
