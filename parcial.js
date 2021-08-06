@@ -10,7 +10,7 @@
 
  let infoCarrito = {
     listaCarrito: [],
-    productoId: [], 
+    productoId: [],
 	cantidad: [],
 	cantidadTotalProductos: 0, 
     getIndexProducto: function(producto) {
@@ -18,7 +18,8 @@
     }
 }
 
-const crearProducto = function() {
+// TODO Aca filtrar por categoria
+const crearProducto = function(producto) {
     for (let producto of catalogo) {
         let padre = d.createElement('div');
         padre.id = `producto-${producto.id}`;
@@ -32,8 +33,36 @@ const crearProducto = function() {
         padre.append(img, titulo, precio, boton);
     
         d.getElementById('productos').appendChild(padre);
-     }
+    }
 }
+
+    // PRINCIPIOS DE FILTRO POR CATEGORIA
+// const crearProducto = function(producto) {
+//     let padre = d.createElement('div');
+//     padre.id = `producto-${producto.id}`;
+//     let img, titulo, precio, boton;
+
+//     img = crearEstructuraImagen(producto.imagen);
+//     titulo = crearEstructuraNombre(producto.nombre);
+//     precio = crearEstructuraPrecio(producto.precio);
+//     boton = crearBotonAgregar();
+    
+//     padre.append(img, titulo, precio, boton);
+
+//     d.getElementById('productos').appendChild(padre);
+// }
+
+// const filtraCategoria = function() {
+//     for (let producto of catalogo) {
+//         if(valorSeleccionado == todos) {
+//             crearProducto(producto)
+//         } else {
+//             if (producto.categoria == valorSeleccionado) {
+//                 crearProducto(producto)
+//             }
+//         }
+//     }   
+// }
 
 const crearBotonAgregar = function() {
     let boton = d.createElement('button');
@@ -76,7 +105,6 @@ const crearbotonCerrar = function() {
     cerrar.textContent = 'X';
     return cerrar;
 }
-
 
 const crearModalProducto = function() {
     let imagenes = d.querySelectorAll('img');
@@ -193,7 +221,7 @@ const crearMiniCarrito = function() {
 }
 
 const crearModalCarrito = function() {
-    let cerrar, items, prod, titulo, precio, eliminar, cantidad;
+    let cerrar, items, prod, titulo, precio, eliminar, cantidad, vaciarCarrito;
     let div = d.createElement('div');
     div.className = "modal";
     d.body.appendChild(div);
@@ -228,7 +256,22 @@ const crearModalCarrito = function() {
 
             itemsAgregadosAlCarrito(producto.id);
         })
-        prod.append(titulo, precio, eliminar, cantidad);
+
+        vaciarCarrito = d.createElement('a')
+        vaciarCarrito.textContent = 'Vaciar';
+        vaciarCarrito.addEventListener('click', e => { 
+            infoCarrito.listaCarrito = []
+            infoCarrito.productoId = []
+            infoCarrito.cantidad = []
+            infoCarrito.cantidadTotalProductos = 0;
+    
+            e.target.parentNode.parentNode.remove()
+            contProdsCarrito = 0;
+            acumTotal = 0;
+            items.textContent = `${contProdsCarrito} productos - Total: $${acumTotal}`;
+        })
+
+        prod.append(titulo, precio, eliminar, cantidad, vaciarCarrito);
         ul.appendChild(prod);
     }
     
