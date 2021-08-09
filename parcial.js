@@ -232,7 +232,7 @@ const crearModalCarrito = function() {
     for (let item of infoCarrito) {
         prod = d.createElement('li');
         titulo = crearEstructuraNombre(item.listaProductos.nombre);
-        precio = crearEstructuraPrecio(item.listaProductos.precio);
+        precio = crearEstructuraPrecio(item.listaProductos.precio * item.cantidad);
         cantidad = d.createElement('p');
         cantidad.innerHTML = infoCarrito[infoCarrito.indexOf(item)].cantidad;
 
