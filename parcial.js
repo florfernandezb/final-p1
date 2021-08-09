@@ -176,27 +176,6 @@ function indiceDeBotonApretado(btn) {
         return indice;    
 }
 
-// const agregarItemAlCarrito = function(producto) {
-//     console.log( infoCarrito.productoId)
-//     console.log(producto)
-//     if(infoCarrito.length == 0) {
-//         infoCarrito.push({listaProducto: producto, productoId: producto.id, cantidad: 1})
-//         console.log(infoCarrito)
-//     }
-//      let indice = infoCarrito.indexOf(productoId)
-//     if (indice != -1) {
-//         infoCarrito.cantidad[indice]++;
-//     } else {
-//         infoCarrito.productoId.push(productoId)
-//         infoCarrito.cantidad.push(1)
-//     }
-
-//     infoCarrito.cantidadTotalProductos++
-
-//     let contador = d.getElementById('minicarrito');
-//     contador.firstElementChild.textContent = `${contProdsCarrito} ítems agregados`;
-// }
-
 const crearMiniCarrito = function() {
     let miniCarrito = d.getElementById('minicarrito');
     let items = d.createElement('p');
@@ -225,7 +204,7 @@ const crearModalCarrito = function() {
     })
     
     items = d.createElement('p')
-    items.textContent = `${infoCarrito.cantidadTotalProductos} productos - Total: $${acumTotal}`;
+    items.textContent = `${contProdsCarrito} productos - Total: $${acumTotal}`;
 
     let ul = d.createElement('ul');
     
@@ -244,7 +223,8 @@ const crearModalCarrito = function() {
             if(infoCarrito[infoCarrito.indexOf(item)].cantidad != 1) {
                 infoCarrito[infoCarrito.indexOf(item)].cantidad--
                 let parent = e.target.parentNode
-            parent.querySelectorAll('p')[1].textContent = infoCarrito[infoCarrito.indexOf(item)].cantidad
+                parent.querySelectorAll('p')[1].textContent = infoCarrito[infoCarrito.indexOf(item)].cantidad
+                parent.querySelectorAll('p')[0].textContent = `$${item.listaProductos.precio * item.cantidad}`
             } else {
                 e.target.parentNode.remove();
                 infoCarrito.splice(infoCarrito.indexOf(item), 1);
