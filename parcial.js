@@ -8,15 +8,17 @@
  let contProdsCarrito = 0;
  let acumTotal = 0;
 
- let infoCarrito = {
-    listaCarrito: [],
-    productoId: [],
-	cantidad: [],
-	cantidadTotalProductos: 0, 
-    getIndexProducto: function(producto) {
-        return this.productoId[this.productoId.indexOf(producto)]
-    }
-}
+ let infoCarrito = [
+//      {
+//     listaCarrito: [],
+//     productoId: [],
+// 	cantidad: [],
+// 	cantidadTotalProductos: 0, 
+//     getIndexProducto: function(producto) {
+//         return this.productoId[this.productoId.indexOf(producto)]
+//     }
+// }
+]
 
 // TODO Aca filtrar por categoria
 const crearProducto = function(producto) {
@@ -35,35 +37,6 @@ const crearProducto = function(producto) {
         d.getElementById('productos').appendChild(padre);
     }
 }
-
-
-    // PRINCIPIOS DE FILTRO POR CATEGORIA
-// const crearProducto = function(producto) {
-//     let padre = d.createElement('div');
-//     padre.id = `producto-${producto.id}`;
-//     let img, titulo, precio, boton;
-
-//     img = crearEstructuraImagen(producto.imagen);
-//     titulo = crearEstructuraNombre(producto.nombre);
-//     precio = crearEstructuraPrecio(producto.precio);
-//     boton = crearBotonAgregar();
-    
-//     padre.append(img, titulo, precio, boton);
-
-//     d.getElementById('productos').appendChild(padre);
-// }
-
-// const filtraCategoria = function() {
-//     for (let producto of catalogo) {
-//         if(valorSeleccionado == todos) {
-//             crearProducto(producto)
-//         } else {
-//             if (producto.categoria == valorSeleccionado) {
-//                 crearProducto(producto)
-//             }
-//         }
-//     }   
-// }
 
 const crearBotonAgregar = function() {
     let boton = d.createElement('button');
@@ -152,24 +125,36 @@ const crearModalProducto = function() {
 function agregarAlCarrito() {
     for (let btn of d.querySelectorAll('button')) {
         btn.addEventListener('click', e => {
+            let carrito = new Carrito()
+            carrito.cantidad = 0
             
             let productoSeleccionado = catalogo[indiceDeBotonApretado(btn)];
+            let exist = true;
+
             acumTotal += productoSeleccionado.precio;
             contProdsCarrito++;
             
-            itemsAgregadosAlCarrito(productoSeleccionado.id);
-
-            if (infoCarrito.listaCarrito.length == 0) {
-                infoCarrito.listaCarrito.push(productoSeleccionado);
+            if(infoCarrito.length == 0) {
+                infoCarrito.push({listaProductos: productoSeleccionado, productoId: productoSeleccionado.id, cantidad: 1});
             } else {
-                for (let prod of infoCarrito.listaCarrito) {
-                    if(prod.id == infoCarrito.getIndexProducto(productoSeleccionado.id)) {
-                        infoCarrito.listaCarrito.splice(infoCarrito.listaCarrito.indexOf(prod), 1)
+                for (let prod of infoCarrito) {
+                    if (prod.productoId == productoSeleccionado.id) {
+                        prod.cantidad++;
+                        exist = true;
+                        break;
+                    } else {
+                        exist = false;
                     }
                 }
-                infoCarrito.listaCarrito.push(productoSeleccionado);
             }
-            
+
+            if(!exist) {
+                infoCarrito.push({listaProductos: productoSeleccionado, productoId: productoSeleccionado.id, cantidad: 1});
+            }
+           
+            let contador = d.getElementById('minicarrito');
+            contador.firstElementChild.textContent = `${contProdsCarrito} ítems agregados`;
+
             let agregado = d.getElementById("alerta");
             agregado.className = "show";
             setTimeout(function(){ agregado.className = agregado.className.replace("show", ""); }, 800);
@@ -191,20 +176,26 @@ function indiceDeBotonApretado(btn) {
         return indice;    
 }
 
-const itemsAgregadosAlCarrito = function(productoId) {
-     let indice = infoCarrito.productoId.indexOf(productoId)
-    if (indice != -1) {
-        infoCarrito.cantidad[indice]++;
-    } else {
-        infoCarrito.productoId.push(productoId)
-        infoCarrito.cantidad.push(1)
-    }
+// const agregarItemAlCarrito = function(producto) {
+//     console.log( infoCarrito.productoId)
+//     console.log(producto)
+//     if(infoCarrito.length == 0) {
+//         infoCarrito.push({listaProducto: producto, productoId: producto.id, cantidad: 1})
+//         console.log(infoCarrito)
+//     }
+//      let indice = infoCarrito.indexOf(productoId)
+//     if (indice != -1) {
+//         infoCarrito.cantidad[indice]++;
+//     } else {
+//         infoCarrito.productoId.push(productoId)
+//         infoCarrito.cantidad.push(1)
+//     }
 
-    infoCarrito.cantidadTotalProductos++
+//     infoCarrito.cantidadTotalProductos++
 
-    let contador = d.getElementById('minicarrito');
-    contador.firstElementChild.textContent = `${infoCarrito.cantidadTotalProductos} ítems agregados`;
-}
+//     let contador = d.getElementById('minicarrito');
+//     contador.firstElementChild.textContent = `${contProdsCarrito} ítems agregados`;
+// }
 
 const crearMiniCarrito = function() {
     let miniCarrito = d.getElementById('minicarrito');
@@ -238,24 +229,29 @@ const crearModalCarrito = function() {
 
     let ul = d.createElement('ul');
     
-    for (let producto of infoCarrito.listaCarrito) {
+    for (let item of infoCarrito) {
         prod = d.createElement('li');
-        titulo = crearEstructuraNombre(producto.nombre);
-        precio = crearEstructuraPrecio(producto.precio);
-        cantidad = d.createElement('p')
-        cantidad.innerHTML = infoCarrito.cantidad[infoCarrito.productoId.indexOf(producto.id)]
+        titulo = crearEstructuraNombre(item.listaProductos.nombre);
+        precio = crearEstructuraPrecio(item.listaProductos.precio);
+        cantidad = d.createElement('p');
+        cantidad.innerHTML = infoCarrito[infoCarrito.indexOf(item)].cantidad;
 
         eliminar = d.createElement('a');
         eliminar.textContent = 'Eliminar';
         eliminar.setAttribute('class', 'eliminar');
         eliminar.addEventListener('click', e => { 
-            e.target.parentNode.remove();
-            carrito.splice(carrito.indexOf(producto),1);
+            
+            if(infoCarrito[infoCarrito.indexOf(item)].cantidad != 1) {
+                infoCarrito[infoCarrito.indexOf(item)].cantidad--
+                let parent = e.target.parentNode
+            parent.querySelectorAll('p')[1].textContent = infoCarrito[infoCarrito.indexOf(item)].cantidad
+            } else {
+                e.target.parentNode.remove();
+                infoCarrito.splice(infoCarrito.indexOf(item), 1);
+            }
             contProdsCarrito--;
-            acumTotal = acumTotal - producto.precio;
+            acumTotal = acumTotal - item.listaProductos.precio;
             items.textContent = `${contProdsCarrito} productos - Total: $${acumTotal}`;
-
-            itemsAgregadosAlCarrito(producto.id);
         })
 
         vaciarCarrito = d.createElement('a')

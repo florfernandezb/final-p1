@@ -11,7 +11,7 @@ function Producto(id = 0, nombre = "", descripcion = "", precio = 0, imagen = ""
         this.cantidad = cantidad;
     }
 
-    this.getCantidad = function(cantidad) {
+    this.getCantidad = function() {
         return this.cantidad;
     }
 }
