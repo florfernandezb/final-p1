@@ -4,21 +4,16 @@
  *	Fernández Bugna Florencia, Jaureguialzo Manuela 
  */
 
- let d = document;
- let contProdsCarrito = 0;
- let acumTotal = 0;
+let d = document;
+let contProdsCarrito = 0;
+let acumTotal = 0;
 
- let infoCarrito = [
-//      {
-//     listaCarrito: [],
-//     productoId: [],
-// 	cantidad: [],
-// 	cantidadTotalProductos: 0, 
-//     getIndexProducto: function(producto) {
-//         return this.productoId[this.productoId.indexOf(producto)]
-//     }
-// }
-]
+let infoCarrito = []
+if (localStorage.infoCarrito) {
+    infoCarrito = JSON.parse(localStorage.infoCarrito);
+} else {
+    localStorage.carrito = JSON.stringify(infoCarrito)
+}
 
 // TODO Aca filtrar por categoria
 const crearProducto = function(producto) {
@@ -125,9 +120,6 @@ const crearModalProducto = function() {
 function agregarAlCarrito() {
     for (let btn of d.querySelectorAll('button')) {
         btn.addEventListener('click', e => {
-            let carrito = new Carrito()
-            carrito.cantidad = 0
-            
             let productoSeleccionado = catalogo[indiceDeBotonApretado(btn)];
             let exist = true;
 
@@ -154,6 +146,8 @@ function agregarAlCarrito() {
            
             let contador = d.getElementById('minicarrito');
             contador.firstElementChild.textContent = `${contProdsCarrito} ítems agregados`;
+            console.log()
+            contador.querySelectorAll('p')[1].textContent = `Total: $${acumTotal}`
 
             let agregado = d.getElementById("alerta");
             agregado.className = "show";
@@ -219,38 +213,45 @@ const crearModalCarrito = function() {
         eliminar.textContent = 'Eliminar';
         eliminar.setAttribute('class', 'eliminar');
         eliminar.addEventListener('click', e => { 
-            
-            if(infoCarrito[infoCarrito.indexOf(item)].cantidad != 1) {
-                infoCarrito[infoCarrito.indexOf(item)].cantidad--
-                let parent = e.target.parentNode
-                parent.querySelectorAll('p')[1].textContent = infoCarrito[infoCarrito.indexOf(item)].cantidad
-                parent.querySelectorAll('p')[0].textContent = `$${item.listaProductos.precio * item.cantidad}`
-            } else {
-                e.target.parentNode.remove();
-                infoCarrito.splice(infoCarrito.indexOf(item), 1);
-            }
-            contProdsCarrito--;
-            acumTotal = acumTotal - item.listaProductos.precio;
+            eliminarUnProducto(item, e)
             items.textContent = `${contProdsCarrito} productos - Total: $${acumTotal}`;
         })
 
-        vaciarCarrito = d.createElement('a')
-        vaciarCarrito.textContent = 'Vaciar';
-        vaciarCarrito.addEventListener('click', e => { 
-            infoCarrito.listaCarrito = []
-            infoCarrito.productoId = []
-            infoCarrito.cantidad = []
-            infoCarrito.cantidadTotalProductos = 0;
-    
-            e.target.parentNode.parentNode.remove()
-            contProdsCarrito = 0;
-            acumTotal = 0;
-            items.textContent = `${contProdsCarrito} productos - Total: $${acumTotal}`;
-        })
+        
 
-        prod.append(titulo, precio, eliminar, cantidad, vaciarCarrito);
+        prod.append(titulo, precio, eliminar, cantidad);
         ul.appendChild(prod);
     }
+    vaciarCarrito = d.createElement('a')
+        vaciarCarrito.textContent = 'Vaciar';
+        vaciarCarrito.addEventListener('click', e => { 
+            vaciarCarro(e)
+            items.textContent = `${contProdsCarrito} productos - Total: $${acumTotal}`;
+            ul.remove()
+        })
     
-    div.append(cerrar, items, ul);
+    div.append(cerrar, items, ul, vaciarCarrito);
+}
+
+const eliminarUnProducto = function(item, e) {
+    if(infoCarrito[infoCarrito.indexOf(item)].cantidad != 1) {
+        infoCarrito[infoCarrito.indexOf(item)].cantidad--
+        let parent = e.target.parentNode
+        parent.querySelectorAll('p')[1].textContent = infoCarrito[infoCarrito.indexOf(item)].cantidad
+        parent.querySelectorAll('p')[0].textContent = `$${item.listaProductos.precio * item.cantidad}`
+    } else {
+        e.target.parentNode.remove();
+        infoCarrito.splice(infoCarrito.indexOf(item), 1);
+    }
+    contProdsCarrito--;
+    acumTotal = acumTotal - item.listaProductos.precio;
+}
+
+const vaciarCarro = function(e) {
+    infoCarrito = []
+    contProdsCarrito = 0;
+    acumTotal = 0;
+    let contador = d.getElementById('minicarrito');
+    contador.firstElementChild.textContent = `${contProdsCarrito} ítems agregados`;
+    contador.querySelectorAll('p')[1].textContent = `Total: $${acumTotal}`
 }
