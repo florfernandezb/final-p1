@@ -274,32 +274,3 @@ const crearModalCarrito = function() {
     
     div.append(cerrar, items, ul);
 }
-
-
-
-
-// Intento de contador por producto duplicado
-
-// var productosFiltrados = carrito.filter(function(item, index, array) {
-    //     // let contador = 1;
-    //     if(array.indexOf(item) != index) {
-            
-    //         item.setCantidad(contador++)
-    //         console.log("analizar", item.nombre, item.getCantidad())
-    //     } else {
-    //         return array.indexOf(item) === index;
-    //     }
-    // })
-
-    // for (let producto of productosFiltrados) {
-    //     prod = d.createElement('li')
-    //     titulo = crearEstructuraNombre(producto.nombre)
-    //     precio = crearEstructuraPrecio(producto.precio)
-    //     eliminar = d.createElement('a')
-    //     eliminar.textContent = 'Eliminar'
-    //     eliminar.addEventListener = function() {
-    //         prod.remove();
-    //     }
-    //     prod.append(titulo, precio, eliminar)
-    //     ul.appendChild(prod)
-    // }
