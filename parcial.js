@@ -186,7 +186,7 @@ const crearMiniCarrito = function() {
 }
 
 const crearModalCarrito = function() {
-    let cerrar, items, prod, titulo, precio, eliminar, cantidad, vaciarCarrito;
+    let cerrar, items, prod, titulo, precio, eliminar, cantidad, vaciarCarrito, eliminarProds;
     let div = d.createElement('div');
     div.className = "modal";
     d.body.appendChild(div);
@@ -217,9 +217,14 @@ const crearModalCarrito = function() {
             items.textContent = `${contProdsCarrito} productos - Total: $${acumTotal}`;
         })
 
-        
+        eliminarProds = d.createElement('a');
+        eliminarProds.textContent = 'Eliminar Prods';
+        eliminarProds.addEventListener('click', e => {
+            eliminarProductos(item, e)
+            items.textContent = `${contProdsCarrito} productos - Total: $${acumTotal}`;
+        })
 
-        prod.append(titulo, precio, eliminar, cantidad);
+        prod.append(titulo, precio, eliminar, cantidad, eliminarProds);
         ul.appendChild(prod);
     }
     vaciarCarrito = d.createElement('a')
@@ -245,6 +250,16 @@ const eliminarUnProducto = function(item, e) {
     }
     contProdsCarrito--;
     acumTotal = acumTotal - item.listaProductos.precio;
+}
+
+const eliminarProductos = function(item, e) {
+    let cant = infoCarrito[infoCarrito.indexOf(item)].cantidad
+    let precio = infoCarrito[infoCarrito.indexOf(item)].listaProductos.precio
+    contProdsCarrito = contProdsCarrito - cant
+    acumTotal = acumTotal - (precio * cant)
+    e.target.parentNode.remove()
+    infoCarrito.splice(infoCarrito.indexOf(item))
+    
 }
 
 const vaciarCarro = function(e) {
